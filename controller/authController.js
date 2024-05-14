@@ -1,9 +1,9 @@
 import express from 'express';
 var router = express.Router();
-import dbConn from '../db.js'; 
+import dbConn from '../db/db.js'; 
 // display user page
 router.get('/', function(req, res, next) {      
-    dbConn.query('SELECT * FROM users', function(err, rows) {
+    dbConn.query('SELECT * FROM users WHERE username = ?',['hiren'] ,function(err, rows) {
         if (err) {
             res.status(500).json({ error: 'Database error' });
         } else {
