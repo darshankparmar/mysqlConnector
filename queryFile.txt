@@ -1,0 +1,13 @@
+CREATE DATABASE splitwise;
+
+use splitwise;
+
+CREATE TABLE splitwise.users (
+    id VARCHAR(255) NOT NULL PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    password VARCHAR(255) NOT NULL,
+    email VARCHAR(255) NOT NULL UNIQUE,
+    authToken VARCHAR(255) NOT NULL,
+    createdAt BIGINT ,
+    updatedAt BIGINT 
+);

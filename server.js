@@ -3,7 +3,7 @@ import authController from './controller/authController.js';
 
 const app = express(); 
 const router = express.Router();
-
+router.use(express.json());
 // display user page
 router.get('/', function(req, res, next) {      
     console.log("hello world!!");

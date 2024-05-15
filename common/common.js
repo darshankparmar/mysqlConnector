@@ -1,4 +1,4 @@
-import dbConn from '../db.js';
+import dbConn from '../db/db.js'; 
 
 export async function executeQuery(query, parameters) {
     return new Promise((resolve, reject) => {
