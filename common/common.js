@@ -1,4 +1,6 @@
-import dbConn from '../db/db.js'; 
+import dbConn from '../db/db.js';
+import { v4 as uuidv4 } from "uuid";
+
 
 export async function executeQuery(query, parameters) {
     return new Promise((resolve, reject) => {
@@ -10,4 +12,8 @@ export async function executeQuery(query, parameters) {
             }
         });
     });
+}
+
+export async function genrateV4uuid(){
+    return uuidv4();
 }

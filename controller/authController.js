@@ -1,23 +1,14 @@
 import express from "express";
-import { v4 as uuidv4 } from "uuid";
 import response from "../common/response.js";
-import jwt from "jsonwebtoken";
-import bcrypt from "bcrypt";
-import { executeQuery } from "../common/common.js";
+import { createUser, getUsers, login } from "../db/user.js";
 
 var router = express.Router();
 
 // display user page
-router.get("/", async function (req, res, next) {
+router.get("/", async function (req, res) {
   try {
-    const query = `SELECT * FROM users`;
-    const result = await executeQuery(query, []);
-    if (result) {
-      console.log("success", result);
-      res.send(result);
-    } else {
-      res.send(response.notFound);
-    }
+    const result = await getUsers();
+    res.send(result);
   } catch (error) {}
 });
 
@@ -29,23 +20,13 @@ router.post("/createUser", async function (req, res) {
     const email = req.body.email;
 
     const hashedPassword = await bcrypt.hash(password, 10);
-    console.log(hashedPassword);
-
-    const query = `INSERT INTO users (id, name, email, password, authToken) VALUES (?, ?, ?, ?, ?);`;
-    const result = await executeQuery(query, [
-      uuidv4(),
-      name,
-      email,
-      hashedPassword,
-      authToken,
-    ]);
-    console.log(result);
-    if (result.affectedRows === 1) {
-      console.log(result);
-      res.send(response.success);
-    } else {
-      res.send(response.badRequest);
-    }
+    const data = {
+      name: req.body.name,
+      email: req.body.email,
+      authToken: req.body.authToken,
+    };
+    const info = await createUser(data);
+    res.send(info);
   } catch (error) {
     res.send(response.internalServerError);
   }
@@ -53,25 +34,13 @@ router.post("/createUser", async function (req, res) {
 
 router.get("/login", async function (req, res) {
   try {
-    const email = req.headers.email;
-    const password = req.headers.password;
-    const query = `SELECT * FROM users WHERE email = ?`;
-    const result = await executeQuery(query, [email]);
-    console.log(result);
-    if (result) {
-      const user = result[0];      // Compare the provided password with the hashed password stored in the database
-      const passwordMatch = await bcrypt.compare(password, user.password);
-    console.log(passwordMatch);
-      if (passwordMatch) {
-        // If passwords match, generate and send an authToken
-        const authToken = jwt.sign({ userId: user.id }, "your_secret_key", {
-          expiresIn: "24h",
-        });
-        res.send({ authToken });
-      } else {
-        res.send(response.unauthorized);
-      }
-    }
+    const data = {
+      email: req.headers.email,
+      password: req.headers.password,
+    };
+
+    const info = await login(data);
+    res.send(info);
   } catch (error) {
     res.send(response.internalServerError);
   }
