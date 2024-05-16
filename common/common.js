@@ -14,6 +14,6 @@ export async function executeQuery(query, parameters) {
     });
 }
 
-export async function genrateV4uuid(){
+export function generateV4uuid(){
     return uuidv4();
 }

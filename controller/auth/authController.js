@@ -1,6 +1,7 @@
 import express from "express";
-import response from "../common/response.js";
-import { createUser, getUsers, login } from "../db/user.js";
+import response from "../../common/response.js";
+import { createUser, getUsers, login } from "../../db/user.js";
+import bcrypt from "bcrypt";
 
 var router = express.Router();
 
@@ -24,6 +25,7 @@ router.post("/createUser", async function (req, res) {
       name: req.body.name,
       email: req.body.email,
       authToken: req.body.authToken,
+      password : hashedPassword
     };
     const info = await createUser(data);
     res.send(info);

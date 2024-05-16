@@ -8,7 +8,6 @@ export function auth(req, res, next) {
 
   if (authToken) {
     const token = authToken.split(' ')[1];
-    console.log("ddsddsds",token);
 
     jwt.verify(token, process.env.PRIVATE_KEY, (err, user) => {
       if (err) {

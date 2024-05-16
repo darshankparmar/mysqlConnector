@@ -1,5 +1,6 @@
 import express from 'express';
-import authController from './controller/authController.js';
+import authController from './controller/auth/authController.js';
+import expenseController from './controller/expense/expenseController.js';
 import {auth} from './middleware/authMiddleware.js';
 
 const app = express(); 
@@ -14,7 +15,7 @@ router.get('/', function(req, res, next) {
 // Mount the router on the root path
 app.use('/', router);
 app.use('/auth', authController);
-app.use('/addExpense', auth, authController);
+app.use('/addExpense', auth, expenseController);
 
 app.listen(3000, () => {
     console.log("Listening on port 3000…");
