@@ -4,8 +4,9 @@ import responses from "../common/response.js";
 export async function addExpense(data) {
   try {
     const query = `INSERT INTO expense (id, amount, name, paidBy, owedBy, createdBy) VALUES (?, ?, ?, ?, ?, ?);`;
+    const expenseId = generateV4uuid();
     const result = await executeQuery(query, [
-      generateV4uuid(),
+      expenseId,
       data.amount,
       data.name,
       data.paidBy,
@@ -13,7 +14,7 @@ export async function addExpense(data) {
       data.createdBy,
     ]);
     if (result) {
-      return responses.success;
+      return { status: 200, Message: "successfull", data: { expenseId } };
     } else {
       return responses.badRequest;
     }
@@ -24,22 +25,21 @@ export async function addExpense(data) {
 
 export async function addSplitExpense(data) {
   try {
-    const query = `INSERT INTO splitexpense (id, paidBy, owedBy,  amount, createdBy) VALUES (?, ?, ?, ?, ?);`;
+    const query = `INSERT INTO splitexpense (id, paidBy, owedBy,  amount, transactionId, createdBy) VALUES (?, ?, ?, ?, ?, ?);`;
     const result = await executeQuery(query, [
       generateV4uuid(),
       data.paidBy,
       data.owedBy,
       data.amount,
+      data.transactionId,
       data.createdBy,
     ]);
     if (result) {
-        console.log("added...");
       return result;
     } else {
       return responses.badRequest;
     }
   } catch (error) {
-    console.log("eeeee");
     return responses.errorOccured(400, error);
   }
 }

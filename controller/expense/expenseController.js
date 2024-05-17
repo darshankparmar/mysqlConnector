@@ -20,6 +20,8 @@ router.post("/equally", async function (req, res) {
     for (let i = 0; i < owedByUsersList.length; i++) {
       data.owedBy = owedByUsersList[i];
       data.amount = amount / (owedByUsersList.length + 1);
+      data.transactionId = info.data.expenseId;
+      console.log(data.transactionId);
       const info1 = await addSplitExpense(data);
       if (info1.status == 400) {
         res.send(responses.errorOccured(400, info1));
@@ -58,10 +60,9 @@ router.post("/unEqually", async function (req, res) {
           res.send(responses.errorOccured(400, info1));
         }
       }
-      console.log("userList : ", userList);
       const info = await addExpense(data);
       if (info.status == 400) {
-        res.send(responses.errorOccured(400, info1));
+        res.send(responses.errorOccured(400, info));
       }
     }
 
