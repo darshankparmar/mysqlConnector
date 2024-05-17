@@ -15,21 +15,19 @@ export async function createUser(data) {
       data.password,
       data.authToken,
     ]);
-    console.log(result);
     if (result) {
       return responses.created;
     } else {
       return responses.badRequest;
     }
   } catch (error) {
-    console.log(error.sqlMessage);
     return responses.errorOccured(400, error);
   }
 }
 
 export async function getUsers() {
   try {
-    const query = `SELECT * FROM users;`;
+    const query = `SELECT  FROM users;`;
     const result = await executeQuery(query, []);
     if (result) {
       return result;

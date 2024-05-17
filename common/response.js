@@ -35,8 +35,14 @@ const responses = {
     return {
       status: status,
       message: err,
-    };
+    }
   },
+  successResponse: function (status, err) {
+    return {
+      status: status,
+      message: err,
+    }
+  }
 };
 
 export default responses;
